@@ -4,6 +4,7 @@
  */
 exports.index = (req, res) => {
   res.render('home', {
-    title: 'Home'
+    title: res.__('Coronavirus Test'),
+    testMessage: res.__('This is a test message')
   });
 };
