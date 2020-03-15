@@ -2,6 +2,8 @@
  * Module dependencies.
  */
 const express = require('express');
+const cookieParser = require('cookie-parser');
+const i18n = require('i18n');
 const compression = require('compression');
 const session = require('express-session');
 const bodyParser = require('body-parser');
@@ -122,6 +124,23 @@ app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/popper.js/d
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/bootstrap/dist/js'), { maxAge: 31557600000 }));
 app.use('/js/lib', express.static(path.join(__dirname, 'node_modules/jquery/dist'), { maxAge: 31557600000 }));
 app.use('/webfonts', express.static(path.join(__dirname, 'node_modules/@fortawesome/fontawesome-free/webfonts'), { maxAge: 31557600000 }));
+
+i18n.configure({
+  // setup some locales - other locales default to en silently
+  locales: ['en', 'es', 'ca'],
+
+  // sets a custom cookie name to parse locale settings from
+  cookie: 'i18n',
+
+  // where to store json files - defaults to './locales'
+  directory: path.join(__dirname, 'locales')
+});
+
+// you will need to use cookieParser to expose cookies to req.cookies
+app.use(cookieParser());
+
+// i18n init parses req for language headers, cookies, etc.
+app.use(i18n.init);
 
 /**
  * Primary app routes.
